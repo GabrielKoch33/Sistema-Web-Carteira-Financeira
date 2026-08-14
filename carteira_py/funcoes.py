@@ -6,7 +6,7 @@ from categorias import listar_categorias
 from estruturas_dados import logs_entr_saida
 
 # variaveis importantes
-size = 82
+size = 106
 
 '''FUNÇÕES DE INTERFACE'''
 def limpar_tela():
@@ -18,18 +18,18 @@ def limpar_tela():
 
 def pause():
     time.sleep(1.5)
-        
+
 def read_key():
     input("Pressione ENTER para voltar ao menu...")
 
 
 def double_line():
     print('='*size) 
-    
+
 def line():
     print('-'*size)
 
-def imprime_colunas(ref_modulo):
+def imprime_colunas(ref_modulo: str) -> None:
     
     limpar_tela()
     double_line()
@@ -38,7 +38,7 @@ def imprime_colunas(ref_modulo):
 
 
 '''FUNÇÕES DE VALIDAÇÃO'''
-def ler_opcao_menu(num_max_opcao):
+def ler_opcao_menu(num_max_opcao: int) -> int:
     '''
     ler opção dos menus
     '''
@@ -51,13 +51,14 @@ def ler_opcao_menu(num_max_opcao):
             continue
 
         else:
-            if 0 < op < num_max_opcao:
+            if op < 0 or op > num_max_opcao:
                 print('Escolha uma opção dentre as apresentadas!')
                 continue
+
             else:
                 return op
-        
-def valida_editar_ou_excluir_categoria(lista):
+
+def valida_editar_ou_excluir_categoria(lista: list) -> str | int:
     '''
     requer ser chamada para validar o ID que da entrada que o user informar
     '''
@@ -79,7 +80,7 @@ def valida_editar_ou_excluir_categoria(lista):
             else:
                 return id_informado #quando a entrada for validada e não der erro, retorna o id da categoria que o user quer usar
 
-def ler_valida_id ():
+def ler_valida_id () -> int:
     '''força o usuário a digitar um int válido'''
     while True: # valida entrada valida de valores
         try:
@@ -91,75 +92,96 @@ def ler_valida_id ():
 
         else:
             return id_entrada
-        
-'''FUNÇÕES DE CONVERSÃO'''
-def converte_moeda(valor):
 
+'''FUNÇÕES DE CONVERSÃO'''
+def converte_moeda(valor: str) -> str | int:
+    '''
+    Valida a entrada de valores
+    Converte modelo brasileiro -> americano
+    '''
     if valor == '':
         return 'Valores vazios não são permitidos!'
-    
+
     try:
         valor = valor.replace('.', '')
         valor = valor.replace(',', '.')
         valor = float(valor)
 
     except (ValueError,AttributeError):
-        return 'Formato inválido'
-    
+        return 'Formato inválido.'
+
     if valor <= 0:
         return 'Valores negativos ou nulos não são permitidos!'
-    
+
     return valor
 
-def calcula_dias_totais(ref_inicio,ref_fim):
+
+def formata_moeda(valor: int | float) -> str | None:
+    if isinstance(valor, (int, float)):
+        return f"R${valor:.2f}"
+    return valor  # ex: "Nenhuma" passa direto, sem prefixo
+
+
+def calcula_dias_totais(ref_inicio: date,ref_fim: date) -> date:
     periodo = ref_fim - ref_inicio
     dias = periodo.days
     return dias
-              
-def converte_data():
+
+def converte_data() -> date | bool:
     entrada = input("Digite a data (apenas números, ex: 25122026): ").strip()
 
     if len(entrada) == 8 and entrada.isdigit():
         texto_data = f"{entrada[:2]}/{entrada[2:4]}/{entrada[4:]}"
-        data_formatada = datetime.strptime(
-            texto_data,
-            "%d/%m/%Y")
+        data_formatada = datetime.strptime(texto_data,"%d/%m/%Y")
         return data_formatada
         # data agora é um OBJETO DATETIME, não string
     else:
         return False
 
 '''FUNÇÕES DE BUSCA E GERAÇÃO'''  
-def encontra_campo_e_indice(ref_valor, ref_lista,campo_alvo):
+def encontra_campo_e_indice(
+                            ref_valor: str | int,
+                            ref_lista: list[dict],
+                            campo_alvo: str
+                            ) -> tuple[bool,int]:
     '''
     Campo alvo deve existir como key dentro do dicionário
     '''
     for index, item in enumerate(ref_lista):
-        if item [campo_alvo] == ref_valor:
+        if item[campo_alvo] == ref_valor:
             return True, index
     else:  
         return False, -1
-    
-def gera_id(lista):
+
+def gera_id(lista: list, id: str) -> int:
     '''
     acessa uma lista, se for vazia retorna id 1 para o 1º elemento, senão encontra o maior nº id e + 1
     '''
     if not lista:
         return 1
     else:
-        return max(item["id"] for item in lista) + 1
+        return max(item[id] for item in lista) + 1
+
+def busca_cofr_livre(lista_cofr: dict) -> set:
+    cofr_livres = set()
+    for chave, valor in lista_cofr.items():
+        if valor is None:
+            cofr_livres.add(chave)
+    return cofr_livres
 
 
 '''FUNÇÕES DE MANIPULAÇÃO DE ESTRUTURAS E SALDO'''
-def hash_palavra_desc(ref_id,
-                      lista_hash,
-                      caso, # Criar/Excluir/Editar
-                      ref_desc=[], # nova descricao
-                      tipo_lista=[], # estamos percorrendo uma descricao de uma lista de entradas ou saída?
-                      ref_indice=0): # indice não é usado na entrada
+def hash_palavra_desc(
+    ref_id: int,
+    lista_hash: list[dict],
+    caso: str,  # Criar/Excluir/Editar
+    ref_desc=[],  # nova descricao
+    tipo_lista=[],  # estamos percorrendo uma descricao de uma lista de entradas ou saída?
+    ref_indice=0,  # indice não é usado na entrada
+    ) -> None:
 
     match caso:
-        case 'adicionar':
+        case "adicionar":
 
             for palavra in ref_desc:
                 if palavra not in lista_hash:
@@ -167,21 +189,21 @@ def hash_palavra_desc(ref_id,
                     lista_hash[palavra].add(ref_id)
                 else:
                     lista_hash[palavra].add(ref_id)
-    
+
         case 'excluir':
-            
+
             for palavra in tipo_lista[ref_indice]['descricao']:
                 lista_hash[palavra].discard(ref_id)
                 if not lista_hash[palavra]:
                     del lista_hash[palavra]
-            
+
         case 'editar':
-            
+
             for palavra in tipo_lista[ref_indice]['descricao']:
                 lista_hash[palavra].discard(ref_id)
                 if not lista_hash[palavra]:
                     del lista_hash[palavra]
-                
+
             for palavra in ref_desc:
                 if palavra not in lista_hash:
                     lista_hash[palavra] = set()
@@ -190,6 +212,7 @@ def hash_palavra_desc(ref_id,
                     lista_hash[palavra].add(ref_id)
 
             tipo_lista[ref_indice]['descricao'] = ref_desc
+
 
 '''
 common cases:
@@ -212,23 +235,37 @@ common cases:
 
 saldo_atual = 0 # valor que será alterado sempre que alguma movimentação for feita
 saldo_inicial = 0 # valor que é alterado quando: usuário loga pela primeira vez E quando solicita
-#corrigir/alterar o saldo informado no primeiro login
+# corrigir/alterar o saldo informado no primeiro login
 
-def insere_log(tipo_operacao,ref_id,ref_vl_entr):
+def insere_log(
+            tipo_operacao: str,
+            ref_id: int,
+            ref_vl_entr: float
+            ) -> None:
     '''
     Função chamada ao:
     -> criar entrada/despesa
     '''
     global saldo_atual
 
-    logs_entr_saida.append({"tipo": tipo_operacao,"valor":ref_vl_entr,"id":ref_id})
+    logs_entr_saida.append(
+                           {
+                           "tipo": tipo_operacao,
+                           "valor":ref_vl_entr,
+                           "id_lista":ref_id
+                           }
+                          )
 
     if tipo_operacao == 'entrada':
         saldo_atual += ref_vl_entr
     else:
         saldo_atual -= ref_vl_entr
 
-def edita_log(tipo_operacao,ref_id,ref_vl_novo):
+def edita_log(
+            tipo_operacao: str,
+            ref_id: int,
+            ref_vl_novo: float
+            ):
     '''
     Função chamada ao:
     -> editar o campo 'valor' de entrada ou despesa 
@@ -236,7 +273,7 @@ def edita_log(tipo_operacao,ref_id,ref_vl_novo):
     global saldo_atual
 
     for log in logs_entr_saida:
-        if log['tipo'] == tipo_operacao and log['id'] == ref_id:
+        if log['tipo'] == tipo_operacao and log['id_lista'] == ref_id:
             vl_velho = log['valor']
 
             if tipo_operacao == 'entrada':
@@ -258,15 +295,19 @@ def edita_log(tipo_operacao,ref_id,ref_vl_novo):
                     saldo_atual -= 0
                 log['valor'] = ref_vl_novo
                 break
-            
 
-def exclui_log(tipo_operacao,ref_id,ref_vl_removido):
+
+def exclui_log(
+            tipo_operacao: str,
+            ref_id: int,
+            ref_vl_removido: float
+            ):
 
     global saldo_atual
 
     for indice,log in enumerate(logs_entr_saida):
 
-        if log['tipo'] == tipo_operacao and log['id'] == ref_id:
+        if log['tipo'] == tipo_operacao and log['id_lista'] == ref_id:
 
             if tipo_operacao == 'entrada':
                 saldo_atual -= ref_vl_removido
@@ -275,15 +316,15 @@ def exclui_log(tipo_operacao,ref_id,ref_vl_removido):
 
             _ = log.pop(indice)
             break
-                
 
-def redefine_saldo():
+
+def redefine_saldo() -> str:
     global saldo_atual
     global saldo_inicial
 
     limpar_tela()
     double_line()
-    print(saldo_atual)
+    print(f'Seu saldo atual: {saldo_atual}')
     double_line()
     
     confirm = input('Você tem certeza que deseja redefinir seu saldo inicial?\nY/any: ')

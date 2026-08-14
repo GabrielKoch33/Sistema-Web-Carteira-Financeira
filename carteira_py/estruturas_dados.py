@@ -1,80 +1,70 @@
 lista_categorias = [ 
-  {"id":1,"nome":"alimentação","default":True},
-  {"id":2,"nome":"transporte","default":True},
-  {"id":3,"nome":"moradia","default":True},
-  {"id":4,"nome":"saúde","default":True},
-  {"id":5,"nome":"educação","default":True},
-  {"id":6,"nome":"lazer","default":True},
-  {"id":7,"nome":"parcelas","default":True},
-  {"id":8,"nome":"salário","default":True},
-  {"id":9,"nome":"investimentos","default":True},
-  {"id":10,"nome":"outros","default":True}
+    {"id":1,"nome":"alimentação","default":True},
+    {"id":2,"nome":"transporte","default":True},
+    {"id":3,"nome":"moradia","default":True},
+    {"id":4,"nome":"saúde","default":True},
+    {"id":5,"nome":"educação","default":True},
+    {"id":6,"nome":"lazer","default":True},
+    {"id":7,"nome":"parcelas","default":True},
+    {"id":8,"nome":"salário","default":True},
+    {"id":9,"nome":"investimentos","default":True},
+    {"id":10,"nome":"outros","default":True}
 ]
 
 lista_entradas = [
+    # Registra as entradas cadastradas pelo user
     # {
-    #     "id": 2,
-    #     "valor": 120.50,
-    #     "descricao": ["mercado", "mensal"],
-    #     "categoria": "alimentação",
-    #     "data": "06/06/2026"
+    #   "id": 2,
+    #   "valor": 120.50,
+    #   "descricao": ["mercado", "mensal"],
+    #   "categoria": "alimentação",
+    #   "data": "06/06/2026"
     # },
-    # {
-    #  ...
-    # }...
 ]
 
 lista_despesas = [
+    # Registra as despesas cadastradas pelo user    
     # {
-    #     "id": 4,
-    #     "valor": 212.00,
-    #     "descricao": ["presente", "namorada"],
-    #     "categoria": "presentes",
-    #     "data": "02/04/2026"
+    #   "id": 4,
+    #   "valor": 212.00,
+    #   "descricao": ["presente", "namorada"],
+    #   "categoria": "presentes",
+    #   "data": "02/04/2026"
     # },
-    # {
-    # ...
-    # }...
 ]
 
 logs_entr_saida = [
+    # Registra Entradas + Despesas com objetivo de controlar o saldo
     # {
-    #   "tipo": 'saida', 
-    #   "id_lista": 4,
-    #   "valor": 212.00,
-    #   "acao": 'adicionar',
+    #   "tipo": 'saida', STR
+    #   "valor": 212.00, FLOAT   
+    #   "id_lista": 4,   INT
     # },
-    # {
-    # ...
-    # }...
 ]
 
 lista_cofrinhos = [
     # {
-    #   "id": 1, 
-    #   "nome": 'Reserva Financeira',
-    #   "data_criacao": '25/01/2025',
-    #   "valor_atual": 5434.00,
-    #   "auto_deposito": True,
-    #   "qtd_automatica": 10.00,
-    #   "meta": False
-    # }
-    # {
-    #   "id": 1, 
-    #   "nome": 'Reserva Financeira',
-    #   "data_criacao": '25/01/2025',
-    #   "valor_atual": '5434.00',
-    #   "meta": True,
-    #   "valor_final_desejado": 10.000,00,
-    #   "porcentagem_conclusao": 52
-    # }
+    #   "id_cofr":        INT,
+    #   "nome_cofr":      STR,
+    #    "dt_cofr":        STR,
+    #   "val_atual_cofr": FLOAT,
+    #   "auto_depo":      BOOL
+    #   "val_auto_depo":  FLOAT,
+    #   "id_meta":        BOLL/INT,
+    # },
 ]
 
-logs_metas = [
+tabela_assoc_metas = {
+    # id_cofr id_meta->
+    # 1 : 2     INT
+    # 2 : None  NONE
+}
+  
+lista_metas = [
     # {
-    #   "id_cofrinho": 2,
-    #   "valor_meta": 10,000.00,
-    #   ""
+    #   "id_meta": 1,
+    #   "objetivo": "comprar um carro",
+    #   "valor_meta": 10.000,00
     # }
 ]
 
@@ -93,4 +83,3 @@ palavras_desc_despesas = {
     # "namorada": {3},
     # "amigo":{2},...
 }
-
