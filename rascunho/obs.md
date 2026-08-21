@@ -1,28 +1,26 @@
                     ┌─────────────────────┐
                     │      NAVEGADOR      │
-                    │ HTML + CSS + JS     │
+                    │   HTML + CSS + JS   │
                     └──────────┬──────────┘
-                               │ HTTP
+                               │ HTTP / JSON
                                ▼
                     ┌─────────────────────┐
-                    │       PHP           │
-                    │     Backend         │
+                    │    PYTHON / FLASK   │
+                    │   Backend Principal │
                     │                     │
-                    │ POO                 │
-                    │ MVC                 │
+                    │ POO & MVC           │
                     │ Autenticação        │
-                    │ Regras de negócio   │
+                    │ Regras de Negócio   │
                     │ API REST            │
-                    └───────┬───────┬─────┘
-                            │       │
-                    SQL     │       │ HTTP/JSON
-                            ▼       ▼
-                    ┌──────────┐ ┌──────────────┐
-                    │ Banco    │ │   Python     │
-                    │ Postgre  │ │   Services   │
-                    │          │ │              │
-                    └──────────┘ │ Análises     │
-                                 │ Relatórios   │
-                                 │ Importações  │
-                                 │ Estatísticas │
-                                 └──────────────┘
+                    │ ─────────────────── │
+                    │ Análises / Pandas   │
+                    │ Relatórios / Stats  │
+                    │ Importações         │
+                    └───────┬─────────────┘
+                            │
+                    SQL     │ 
+                            ▼
+                    ┌──────────────┐
+                    │    Banco     │
+                    │  PostgreSQL  │
+                    └──────────────┘
